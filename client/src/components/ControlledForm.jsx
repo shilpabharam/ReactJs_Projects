@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+/*  Way to handle controlled and uncontrolled component*/
 
 export default function ControlledForm() {
   const [name, setName] = useState("");
