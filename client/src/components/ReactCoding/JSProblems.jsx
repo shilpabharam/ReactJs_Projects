@@ -11,10 +11,11 @@ let input =[
   {name: "A", scores: [10, 20, 30]},
   {name: "B", scores: [5, 15]}]
 
-    input.map(item => ({
+   let res =  input.map(item => ({
         name: item.name,
         average: item.scores.reduce((acc, curr)=> acc + curr , 0) / item.scores.length
     }))
+    return res;
 }
 
 
@@ -40,7 +41,6 @@ let input = [
   {name: "B", scores: [50, 60]},
   {name: "C", scores: [40, 50, 60]}
 ]
-
     let maxAvg = -Infinity;
     let bestObj = null;
     
@@ -52,7 +52,6 @@ let input = [
         }
         
         const avg = sum / score.length;
-        
         if(maxAvg < avg ){
            maxAvg =  avg;
             bestObj = arr[i];
@@ -60,9 +59,6 @@ let input = [
     }
     return bestObj;
 }
-
-
-
     return (
         <div>
             <h2>JavaScript Problems Component</h2>
@@ -70,3 +66,31 @@ let input = [
         </div>
     );
 }
+
+
+function reverseArrK(arr, k) {
+ let n = arr.length;
+ if (n === 0) return;
+
+
+ k = k % n;
+ if (k === 0) return;
+
+
+ function reverse(arr, start, end) {
+   while (start < end) {
+     [arr[start], arr[end]] = [arr[end], arr[start]];
+     start++;
+     end--;
+   }
+ }
+ reverse(arr, 0, n - 1);
+ reverse(arr, 0, k - 1);
+ reverse(arr, k, n - 1);
+ return arr;
+}
+
+
+let arr = [1, 2, 3, 4, 5, 6, 7];
+reverseArrK(arr, 3);
+console.log(arr);
