@@ -1,0 +1,49 @@
+import React, { useState, useEffect } from 'react';
+import './style.css';
+
+export default function TabPreseveData() {
+  const [activeTab, setActiveTab] = useState('A');
+  const [tabData, setTabData] = useState({
+    A: '',
+    B: '',
+    C: '',
+  });
+  
+  const handleValue = (value) => {
+    setTabData((prev) => ({
+      ...prev,
+      [activeTab]: value,
+    }));
+  };
+
+  return (
+    <div>
+      <button
+        class={activeTab == 'A' && 'btn'}
+        onClick={() => setActiveTab('A')}
+      >
+        Tab A
+      </button>
+      <button
+        class={activeTab == 'B' && 'btn'}
+        onClick={() => setActiveTab('B')}
+      >
+        Tab B
+      </button>
+      <button
+        class={activeTab == 'C' && 'btn'}
+        onClick={() => setActiveTab('C')}
+      >
+        Tab C
+      </button>
+      <br />
+      <br />
+
+      <input
+        type="text"
+        value={tabData[activeTab]}
+        onChange={(e) => handleValue(e.target.value)}
+      />
+    </div>
+  );
+}
