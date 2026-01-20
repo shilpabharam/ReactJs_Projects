@@ -28,7 +28,6 @@ const role = ['All-rounder', 'Wicket Keeper', 'Bowler', 'Batsman'];
 
 export default function App() {
   const [team, setTeam] = useState([]);
-  const [isDisable, setIsDisable] = useState(false);
 
   const roleCount = team.reduce((acc, curr) => {
     acc[curr.role] = (acc[curr.role] || 0) + 1;
@@ -36,20 +35,20 @@ export default function App() {
   }, {});
 
   const isFullteam = team.length === Max_size;
-  const idRoleLimitExe = (role) => {
-    return roleCount[role] >= role_limit;
-  };
+  const isRoleLimitExceeded = (role) => roleCount[role] >= role_limit;
+
+  const isPlayerSelected = (_id) => team.some((item) => item.id === _id);
 
   const handleAdd = (player) => {
     if (isFullteam) return;
-    console.log('idRoleLimitExe(', idRoleLimitExe(player.role));
-    if (idRoleLimitExe(player.role)) return;
+    if (isPlayerSelected(player.id)) return;
+    if (isRoleLimitExceeded(player.role)) return;
 
     team.find((item) => {
-      item.id === player.id && setIsDisable(true);
+      if (item.id === player.id) {
+        setIsDisable(true);
+      }
     });
-
-    // if (isDisable) return;
 
     setTeam([...team, player]);
   };
@@ -61,15 +60,36 @@ export default function App() {
 
   return (
     <div>
-      <div> </div>
-      <h1>Left Panel</h1>
+      <span> Player added - {team.length + '/' + Max_size} </span>
+      <span>
+        {' '}
+        Batsman added - {(roleCount['Batsman'] || 0) + '/' + role_limit}{' '}
+      </span>
+      <span>
+        {' '}
+        Bowler added - {(roleCount['Bowler'] || 0) + '/' + role_limit}{' '}
+      </span>
+      {/* <span> Batsman added - {roleCount['Batsman'] + '/' + role_limit} </span> */}
       {isFullteam && <div>{'Stop adding player team is full'} </div>}
+      <h1>Player Panel</h1>
+
       <ul>
         {PLAYERS.length > 0 &&
           PLAYERS.map((item) => (
             <li>
+              <div>
+                {' '}
+                {/* {item.role} added - {roleCount[item.role] + '/' + role_limit}{' '} */}
+              </div>
               {item.name} {item.role}{' '}
-              <button disabled={isDisable} onClick={() => handleAdd(item)}>
+              <button
+                disabled={
+                  isFullteam ||
+                  isPlayerSelected(item.id) ||
+                  isRoleLimitExceeded(item.role)
+                }
+                onClick={() => handleAdd(item)}
+              >
                 {' '}
                 Add{' '}
               </button>
@@ -77,7 +97,7 @@ export default function App() {
           ))}
       </ul>
 
-      <h1>Right Panel</h1>
+      <h1>Team Panel</h1>
       <ul>
         {team.length > 0 &&
           team.map((item) => (
